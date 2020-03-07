@@ -11,7 +11,7 @@
           <p v-else>Добавьте события</p>
                     <!-- {{taskIndex}} -->
           <div>
-            <button class="btn task-btn">
+            <button class="btn task-btn" @click="addNewTask()">
               <i class="material-icons">
                 add
               </i>
@@ -24,28 +24,21 @@
           </div>
         </div>
         <div class="tasks" v-for="i in tasks[taskIndex].title.length" style='display: block;'>
-          <input type="text" v-model="tasks[taskIndex].title[i-1]"  style='
-  padding: 4px 12px;
-  box-sizing: border-box;
-  border:none;'>
+          <input type="text" v-model="tasks[taskIndex].title[i-1]" class="border-bottom_display"  style=''>
   <div>
     <!-- {{getOneTask.about[i-1]}} -->
-          <textarea v-model="tasks[taskIndex].about[i-1]" style='
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;border:none; resize:none;width: 100%;
-    height: 70px;'></textarea>
+          <textarea v-model="tasks[taskIndex].about[i-1]" class="task-info_about border-bottom_display" style=''></textarea>
   </div>
             <!-- Описание:{{getOneTask.about[i-1]}}fasd fsdafs df sdf sad fsdfsdafsd afsdafsdaf asdfs daf sdfsd fsa dfsdfsdafsd afsdafsda -->
           
           <!-- <input :placeholder="getOneTask.about[i-1]"> -->
           <!-- <p style="">Описание:<input :value="getOneTask.about[i-1]+'fasdfsdafsdfsdfsadfsdfsdafsdafsdafsdafasdfsdafsdfsdfsadfsdfsdafsdafsdafsda'"></p> -->
           <div class="task-group__btn">
-            <button class="btn task-btn" style="color:black;">
+            <!-- <button class="btn task-btn" style="color:black;">
               <i class="material-icons">
                 edit
               </i>
-            </button>
+            </button> -->
             <button class="btn task-btn" style="color:black;">
               <i class="material-icons">
                 clear
@@ -54,44 +47,17 @@
           </div>
         </div>
         <div class="editTask">
-          <!-- <input type="text"> -->
-
+          <!-- <input type="text"> -->Установить задачу до
+        <input type="text" name="" v-model='tasks[taskIndex].date' style='
+  padding: 4px 12px;
+  box-sizing: border-box;
+  border:none;'>
         </div>
         <div class="" style='display: flex;
     justify-content: flex-end;padding: 5px;'
-    @click="showTaskInfo=!showTaskInfo,deleteEmptyTask()">
-          <button class="btn">Сохранить</button>
+    >     
+          <button class="btn" @click="showTaskInfo=!showTaskInfo,deleteEmptyTask()">Сохранить</button>
         </div>
-        <!-- <div class="tasks">
-          Умыться
-          <div>
-            <button class="btn task-btn" style="color:black;">
-              <i class="material-icons">
-                edit
-              </i>
-            </button>
-            <button class="btn task-btn" style="color:black;">
-              <i class="material-icons">
-                clear
-              </i>
-            </button>
-          </div>
-        </div> -->
-        <!-- <div class="tasks">
-          Умыться
-          <div>
-            <button class="btn task-btn" style="color:black;">
-              <i class="material-icons">
-                edit
-              </i>
-            </button>
-            <button class="btn task-btn" style="color:black;">
-              <i class="material-icons">
-                clear
-              </i>
-            </button>
-          </div>
-        </div> -->
       </div>
 
     <div class="content-table">
@@ -320,6 +286,11 @@ export default {
     showTaskInfo:false,
   }),
   methods: {
+    addNewTask(){
+      this.tasks[this.taskIndex].title.push('')
+      this.tasks[this.taskIndex].about.push('')
+      // this.tasks[this.taskIndex].title.push('hi')
+    },
     deleteAll(param){
       // console.log(param,'PARAM')
      delete this.tasks[param]
@@ -358,15 +329,42 @@ export default {
       // this.getOneTask.title[1]='Am'
     },
     deleteEmptyTask(){
-      this.tasks[this.taskIndex].title.push('hi')
-      this.tasks[this.taskIndex].about.push('hi')
-      
-      console.log(this.tasks[this.taskIndex].title.length,
-      'this.tasks[this.taskIndex].title[0]');
-      if(this.tasks[this.taskIndex].title.length==0 || this.tasks[this.taskIndex].about.length==0){
-        alert('Задайте название и описание задачи')
-        delete this.tasks[this.taskIndex]
+            for (let i = 0; i < this.tasks[this.taskIndex].title.length; i++) {
+        if(this.tasks[this.taskIndex].title[i]==''||this.tasks[this.taskIndex].about[i]==''){
+          this.tasks[this.taskIndex].title.pop()
+          this.tasks[this.taskIndex].about.pop()
+          alert('Опишите задачу полностью')
+        }
+        
       }
+      // this.tasks[this.taskIndex].title.push('hi')
+      // this.tasks[this.taskIndex].about.push('hi')
+      // for (let i = 0; i < this.tasks[this.taskIndex].title.length; i++) {
+      //   // const element = array[i];
+      //   if(this.tasks[this.taskIndex].title[i]==''){
+          
+      //     this.tasks[this.taskIndex].title.pop()
+      //     break
+      //   }
+        
+      // }
+      // for (let i = 0; i < this.tasks[this.taskIndex].about.length; i++) {
+      //   // const element = array[i];
+      //   if(this.tasks[this.taskIndex].about[i]==''){
+          
+      //     this.tasks[this.taskIndex].about.pop()
+      //     alert('Опишите задачу')
+      //     return
+      //   }
+        
+      // }
+      // console.log(this.tasks[this.taskIndex].title.length,
+      // 'this.tasks[this.taskIndex].title[0]');
+      // if(this.tasks[this.taskIndex].title.length==0 || this.tasks[this.taskIndex].about.length==0){
+      //   alert('Задайте название и описание задачи')
+      //   delete this.tasks[this.taskIndex]
+      // }
+      
     },
     deleteLastTask(){
       if(this.taskInfoEvent.toSave==true){
@@ -634,7 +632,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .btn {
   background-color: DodgerBlue;
   border: none;
@@ -766,6 +764,12 @@ table td {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
       position: absolute;
+      &_about{
+  padding: 4px 12px;
+  margin: 8px 0;
+  box-sizing: border-box;resize:none;width: 100%;
+    height: 50px;
+      }
 }
 .tasks-count {
   height: 50px;
@@ -783,7 +787,8 @@ table td {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #438cf5;
+  border: 1px solid #438cf5;
+  padding: 10px;
 }
 .mark-day{
   background-color:rgb(61, 0, 117);
@@ -791,6 +796,11 @@ table td {
 .task-group__btn{
       display: flex;
     justify-content: flex-end;
+}
+.border-bottom_display{
+  padding: 4px 12px;
+  box-sizing: border-box;
+  border-top:none;border-right:none;border-left:none;
 }
 /* .picker-container__color_custom{
   display:none;
