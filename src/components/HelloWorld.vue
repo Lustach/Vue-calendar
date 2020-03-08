@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <!-- {{getKey('7')}} -->
     <!-- {{taskIndex}} -->
     <!-- {{getOneTask}} -->
     <!-- {{new Date().getMonth()}} -->
@@ -23,7 +24,7 @@
             </button>
           </div>
         </div>
-        <div class="tasks" v-for="i in tasks[taskIndex].title.length" style='display: block;'>
+        <div class="tasks" v-for="i in tasks[taskIndex].title.length" style='display: block;' :key='i'>
           <input type="text" v-model="tasks[taskIndex].title[i-1]" class="border-bottom_display"  style=''>
   <div>
     <!-- {{getOneTask.about[i-1]}} -->
@@ -39,7 +40,7 @@
                 edit
               </i>
             </button> -->
-            <button class="btn task-btn" style="color:black;">
+            <button class="btn task-btn" style="color:black;" @click="deleteInfoAboutTask(i)">
               <i class="material-icons">
                 clear
               </i>
@@ -134,6 +135,12 @@
             @changeColor="changeColor"
             @openSucker="openSucker"
           />
+          <button @click="theme.editCustomColor=''" class="btn">
+            Сбросить
+          </button>
+          <button @click="theme.showColorPicker=false" class="btn">
+            Закрыть
+          </button>
         </div>
         {{ color }}
       </div>
@@ -144,6 +151,8 @@
             :key="i"
             @click="test(i)"
             class="days__headers"
+            
+            :style='theme.editCustomColor'
             :class="{ 'total-theme': theme.editTheme }"
           >
             {{ days }}
@@ -153,11 +162,33 @@
           <!-- {{calendarDay}} -->
           <div
             @click="testing(j)"
-            v-for="j in calendarDay"
+            v-for="(j,k) in calendarDay"
             class="days__headers"
+            
+            :key='k'
+            :style='theme.editCustomColor'
             :class="{ 'total-theme__td': theme.editTheme}"
           >
-            <p :v-model="j">{{ j }}</p>
+          <!-- {{saveDay}}
+          {{getKey(6)}} -->
+            <div :v-model="j">{{ j }}</div>
+            <!-- <div  class="task-ball_position">
+            <div  v-for="(l,key) in tasks" :key='key' :v-model='tasks'>
+              <div   class='task-ball' v-if="getKey(j)">
+                <div v-for="m in l.title">
+                
+                </div>
+              </div>
+            </div>
+            </div> -->
+              <!-- <div class="task-ball_item">
+                  
+              </div> -->
+              <!-- <p>{{key}}</p> -->
+              <!-- <div v-for="arrElem in l.title">
+                <p v-if=''>{{arrElem}}</p>
+              </div> -->
+
             <!-- <p ></p> -->
           </div>
         </div>
@@ -177,8 +208,10 @@ export default {
     this.date = new Date().getTime();
   },
   created() {
-    
-    // console.log(this.configDate.day,'month')
+    ///?
+    console.log(this.getKey('7.3.2020'),'return');
+    // this.getKey('7.03.2020')
+    this.configDate.day=new Date().getDate()-1
     this.initDayInTable();
     // this.fortd()
 
@@ -195,25 +228,25 @@ export default {
       );
 
     ///
-    let days = new Date(
-      this.configDate.year,
-      this.configDate.month + 1,
-      0
-    ).getDate(); //нашёл!
-    console.log(days, "days"); //всего дней в месяце
+    // let days = new Date(
+    //   this.configDate.year,
+    //   this.configDate.month + 1,
+    //   0
+    // ).getDate(); //нашёл!
+    // console.log(days, "days"); //всего дней в месяце
 
-    console.log(
-      new Date(
-        this.configDate.year,
-        this.configDate.month,
-        days - days
-      ).getDay(),
-      "день недели первый в этом месяце"
-    );
+    // console.log(
+    //   new Date(
+    //     this.configDate.year,
+    //     this.configDate.month,
+    //     days - days
+    //   ).getDay(),
+    //   "день недели первый в этом месяце"
+    // );
     this.setLimit();
   },
   mounted() {
-    this.FUCKYOU();
+    this.fillCalendar();
     this.fillTable();
     console.log(this.initDate.firstDayOfMonth);
   },
@@ -284,28 +317,31 @@ export default {
     taskIndex:null,
     getOneTask:{},
     showTaskInfo:false,
+    saveDay:'',
   }),
   methods: {
+    getKey(param){
+          if(this.tasks[`${param}.`+`${this.configDate.month+1}.`+`${this.configDate.year}`]){
+            return true
+          }
+          return false
+    },
     addNewTask(){
       this.tasks[this.taskIndex].title.push('')
       this.tasks[this.taskIndex].about.push('')
-      // this.tasks[this.taskIndex].title.push('hi')
     },
     deleteAll(param){
-      // console.log(param,'PARAM')
      delete this.tasks[param]
-    //  console.log(this.tasks[param],'THISs')
      this.showTaskInfo=false
     },
-    deleteInfoAboutTask(){
-
+    deleteInfoAboutTask(param){
+      this.tasks[this.taskIndex].about.splice(param-1,1)
+      this.tasks[this.taskIndex].title.splice(param-1,1)
     },
     testing(j) {
-      // console.log(j, "jjjjjjjjjj");
       if(j>0){
         console.log();
       this.showTaskInfo=!this.showTaskInfo
-      // console.log(j+`.${this.configDate.month}`+`.${this.configDate.year}`);
       this.getTaskInfo(j+`.${this.configDate.month+1}`+`.${this.configDate.year}`)
       }
       else 
@@ -324,67 +360,34 @@ export default {
       }
       console.log('HEREHERE');
       this.taskInfoEvent.toSave=false
-      // console.log(this.tasks,'this.tasks');
-      // this.getOneTask=JSON.parse(JSON.stringify(this.tasks[param]));
-      // this.getOneTask.title[1]='Am'
     },
     deleteEmptyTask(){
-            for (let i = 0; i < this.tasks[this.taskIndex].title.length; i++) {
-        if(this.tasks[this.taskIndex].title[i]==''||this.tasks[this.taskIndex].about[i]==''){
-          this.tasks[this.taskIndex].title.pop()
-          this.tasks[this.taskIndex].about.pop()
-          alert('Опишите задачу полностью')
+      for (let i = 0; i <= this.tasks[this.taskIndex].title.length; i++) {
+        if(this.tasks[this.taskIndex].title[i]==""||this.tasks[this.taskIndex].about[i]==""){
+          this.deleteInfoAboutTask(i+1)
+          i--
+          continue
         }
         
       }
-      // this.tasks[this.taskIndex].title.push('hi')
-      // this.tasks[this.taskIndex].about.push('hi')
-      // for (let i = 0; i < this.tasks[this.taskIndex].title.length; i++) {
-      //   // const element = array[i];
-      //   if(this.tasks[this.taskIndex].title[i]==''){
-          
-      //     this.tasks[this.taskIndex].title.pop()
-      //     break
-      //   }
-        
-      // }
-      // for (let i = 0; i < this.tasks[this.taskIndex].about.length; i++) {
-      //   // const element = array[i];
-      //   if(this.tasks[this.taskIndex].about[i]==''){
-          
-      //     this.tasks[this.taskIndex].about.pop()
-      //     alert('Опишите задачу')
-      //     return
-      //   }
-        
-      // }
-      // console.log(this.tasks[this.taskIndex].title.length,
-      // 'this.tasks[this.taskIndex].title[0]');
-      // if(this.tasks[this.taskIndex].title.length==0 || this.tasks[this.taskIndex].about.length==0){
-      //   alert('Задайте название и описание задачи')
-      //   delete this.tasks[this.taskIndex]
-      // }
-      
+      if(this.tasks[this.taskIndex].title.length==0 || this.tasks[this.taskIndex].about.length==0){
+        delete this.tasks[this.taskIndex]
+      }
     },
     deleteLastTask(){
       if(this.taskInfoEvent.toSave==true){
         delete this.tasks[this.taskIndex]
         console.log(this.tasks);
-                console.log('NU I')
         this.taskInfoEvent.toSave=false
       }
     },
     saveTask(){
-
-      //       if(this.taskInfoEvent.toSave==true)
-      //   return
-      // else delete this.tasks[param]
     },
     setLimit() {
       this.dayLimit = this.initDate.daysOfMonth;
       console.log(this.dayLimit, "this.dayLimit");
     },
-    FUCKYOU() {
+    fillCalendar() {
       for (let i = 1; i <= 42; i++) {
         this.calendarDay.push(i);
         console.log(this.calendarDay[i]);
@@ -423,7 +426,8 @@ export default {
         this.configDate.month,
         this.initDate.daysOfMonth - this.initDate.daysOfMonth
       ).getDay();
-      console.log(this.firstDayOfMonth, "this.firstDayOfMonth"); //день недели первого дня месяца
+      console.log(this.initDate.firstDayOfMonth, "this.firstDayOfMonth"); //день недели первого дня месяца
+      console.log(new Date().getDate(),'PLSSS');
     },
     test(e) {
       console.log(e);
@@ -436,9 +440,9 @@ export default {
       this.theme.editTheme = !this.theme.editTheme;
     },
     changeColor(color) {
-      console.log(color.hex);
+      console.log(color.hex,'hexcolor');
       this.color = `${color}`;
-      this.theme.editCustomColor = color.hex;
+      this.theme.editCustomColor = `background-color:${color.hex}`;
     },
     openSucker(isOpen) {
       if (isOpen) {
@@ -449,134 +453,11 @@ export default {
       this.theme.showColorPicker = !this.theme.showColorPicker;
       console.log(this.theme.showColorPicker);
     },
-    configMonthAttribute(param) {
-      if (param == "-") {
-        if (this.configDate.month == 0) {
-          this.configDate.year -= 1;
-          this.configDate.month = 11;
-          this.configDate.day = 0;
-        } else this.configDate.month += 1;
-      } else {
-        if (this.configDate.month == 11) {
-          this.configDate.year += 1;
-          this.configDate.month = 0;
-          this.configDate.day = 0;
-        } else {
-        }
-      }
-    },
-    configYearAttribute(param) {
-      if (param == "-") {
-        this.configDate.year -= 1;
-        this.configDate.month = 11;
-        this.configDate.day = 0;
-      } else {
-        if (this.configDate.month == 11) {
-          this.configDate.year += 1;
-          this.configDate.month = 0;
-          this.configDate.day = 0;
-        }
-      }
-    },
-
-    getDayOfMonth(dayOfWeek) {
-      return "hello";
-      //Нужно сравнить индекст столбца с номером дня недели первого дня месяца если они совпдаают то вернуть
-      //       let days = new Date(
-      //   this.configDate.year,
-      //   this.configDate.month + 1,
-      //   0
-      // ).getDate(); //нашёл!
-      //   let firstDay = this.weekdays[
-      //     new Date(
-      //       this.configDate.year,
-      //       this.configDate.month,
-      //       days - days
-      //     ).getDay()
-      //   ];
-      //   console.log(dayOfWeek);
-      //   let lastDay = this.weekdays[
-      //     new Date(this.configDate.year, this.configDate.month, days - 1).getDay()
-      //   ];
-
-      // console.log(this.weekdays[new Date().getDay()]);
-      // if (this.weekdays[dayOfWeek] == "Вс") {
-      //   // console.log('hih');
-      //   // return '1'
-      // } else {
-      //   // console.log('hih');
-      //   // return this.weekdays[da]
-      // }
-      // else console.log(this.weekdays[new Date().getDay() - 1],'Выводит текущий день недели');
-
-      // // let dayOfMonth = dayOfWeek
-      // // if (this.weekdays[new Date().getDay()] == "Вс")
-      // //   console.log(this.weekdays[6]);
-      // // else console.log(this.weekdays[new Date().getDay() - 1]);
-
-      // // ///
-      //         let firstDay= this.weekdays[
-      //     new Date(
-      //       this.configDate.year,
-      //       this.configDate.month,
-      //       days - days
-      //     ).getDay()
-      //   ]
-
-      //   let lastDay= this.weekdays[
-      //     new Date(
-      //       this.configDate.year,
-      //       this.configDate.month,
-      //       days - 1
-      //     ).getDay()
-      //   ]
-      // console.log(this.weekdays[dayOfWeek],'this.weekdays[dayOfWeek]');
-      // console.log(firstDay,'firstDay');
-      // let days = new Date(
-      //   this.configDate.year,
-      //   this.configDate.month + 1,
-      //   0
-      // ).getDate(); //нашёл!
-
-      // console.log(this.configDate.year, "year");
-      // console.log(this.configDate.month, "month");
-      // console.log(days);
-      // console.log(
-
-      // if(this.weekdays[dayOfWeek]==firstDay){
-      //   console.log('SUCCESS');
-      //   console.log(firstDay,'firstDay');
-      //   console.log(this.weekdays[dayOfWeek],'this.weekdays[dayOfWeek]');
-      //   return firstDay
-      // }
-      // else{
-      //   console.log('not success');
-      // }
-      //Мы должны получить первый день недели, проверить с тем что вернёт функция
-      // let getDayOfMonth = this.weekdays[
-      //   new Date(
-      //     this.configDate.year,
-      //     this.configDate.month,
-      //     days - days
-      //   ).getDay()
-      // ]
-      // console.log(getDayOfMonth,'getDayOfMonth');
-      //   "день недели последний в месяце"
-      // );
-
-      // if(getDayOfMonth=='Вс'){
-
-      // }
-      // this.weekdays[new Date().getDay()] == "Вс"
-      // return dayOfMonth;
-    },
-
     ////////Здесь начинается улыбка
     plusDay() {
       if (this.configDate.day == this.initDate.daysOfMonth) {
         this.plusMonth();
       } else this.configDate.day++;
-
       this.initDayInTable();
       this.fillTable();
     },
@@ -628,7 +509,6 @@ export default {
       ).getDay();
       return this.firstDayOfMonth;
     },
-
   }
 };
 </script>
@@ -641,8 +521,6 @@ export default {
   font-size: 16px;
   cursor: pointer;
 }
-
-/* Darker background on mouse-over */
 .btn:hover {
   background-color: RoyalBlue;
 }
@@ -654,29 +532,6 @@ export default {
   display: flex;
   flex-direction: column;
   width: 1400px;
-  /* width: 100%; */
-}
-table td {
-  /* height: 125px; */
-
-  background-color: antiquewhite;
-  border: 2px solid azure;
-  text-align: center;
-  vertical-align: middle;
-}
-.td-task {
-  height: 95px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.table__td {
-  /* width:500px; */
-  max-width: 100%;
-  height: 20px;
-  background-color: antiquewhite;
 }
 .table__navigation {
   display: flex;
@@ -689,7 +544,8 @@ table td {
 .days__headers {
   background-color: #438cf5;
   color: azure;
-  height: 40px;
+  min-height: 40px;
+  // height: 40px;
   vertical-align: middle;
   width: 190px;
   max-width: 100%;
@@ -697,21 +553,17 @@ table td {
   align-items: center;
   display: flex;
   border: 1px solid azure;
+  display: flex;
+    flex-direction: column;
 }
 .navigation__config {
   padding: 12px 12px 6px 12px;
   display: flex;
   align-items: center;
 }
-.navigation__config * {
-  /* margin:15px; */
-}
 .container {
   display: flex;
   justify-content: center;
-  /*height: -webkit-fill-available;background-color:black;ПОлная заливка фона */
-
-  /* margin-top: 50px; */
 }
 .material-icons {
   font-size: 30px;
@@ -732,12 +584,8 @@ table td {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
-.task-config {
-}
-
 .total-theme {
   background-color: black;
-  /* color:white; */
 }
 .total-theme__td {
   background-color: grey;
@@ -759,7 +607,6 @@ table td {
 }
 .task-info {
   width: 400px;
-  /* height: 500px; */
   background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
@@ -783,6 +630,20 @@ table td {
 .task-btn {
   background-color: transparent;
 }
+.task-ball{
+  width:5px;
+  min-height:5px;
+  background-color:black;
+  border-radius:5000px;
+      margin:5px;
+  &_item{
+    border-radius:5px;
+
+  }
+  &_position{
+    display:flex;
+  }
+}
 .tasks {
   display: flex;
   justify-content: space-between;
@@ -802,8 +663,4 @@ table td {
   box-sizing: border-box;
   border-top:none;border-right:none;border-left:none;
 }
-/* .picker-container__color_custom{
-  display:none;
-} */
-/*dark mode*/
 </style>
