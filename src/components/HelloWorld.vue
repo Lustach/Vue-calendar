@@ -1,73 +1,90 @@
 <template>
   <div class="container">
-    <!-- {{getKey('7')}} -->
-    <!-- {{taskIndex}} -->
-    <!-- {{getOneTask}} -->
-    <!-- {{new Date().getMonth()}} -->
-    <div class="zaglushka" v-if="showTaskInfo" @click="showTaskInfo=!showTaskInfo,deleteLastTask()">    </div>
-      <div class="task-info" v-if="showTaskInfo">
-        <div class="tasks-count">
-          <!-- {{getTaskInfo()}} -->
-          <p v-if="taskIndex!=null">СОБЫТИЙ:  {{tasks[taskIndex].title.length}}</p>
-          <p v-else>Добавьте события</p>
-                    <!-- {{taskIndex}} -->
-          <div>
-            <button class="btn task-btn" @click="addNewTask()">
-              <i class="material-icons">
-                add
-              </i>
-            </button>
-            <button class="btn task-btn" @click="deleteAll(taskIndex)">
-              <i class="material-icons">
-                delete
-              </i>
-            </button>
-          </div>
-        </div>
-        <div class="tasks" v-for="i in tasks[taskIndex].title.length" style='display: block;' :key='i'>
-          <input type="text" v-model="tasks[taskIndex].title[i-1]" class="border-bottom_display"  style=''>
-  <div>
-    <!-- {{getOneTask.about[i-1]}} -->
-          <textarea v-model="tasks[taskIndex].about[i-1]" class="task-info_about border-bottom_display" style=''></textarea>
-  </div>
-            <!-- Описание:{{getOneTask.about[i-1]}}fasd fsdafs df sdf sad fsdfsdafsd afsdafsdaf asdfs daf sdfsd fsa dfsdfsdafsd afsdafsda -->
-          
-          <!-- <input :placeholder="getOneTask.about[i-1]"> -->
-          <!-- <p style="">Описание:<input :value="getOneTask.about[i-1]+'fasdfsdafsdfsdfsadfsdfsdafsdafsdafsdafasdfsdafsdfsdfsadfsdfsdafsdafsdafsda'"></p> -->
-          <div class="task-group__btn">
-            <!-- <button class="btn task-btn" style="color:black;">
-              <i class="material-icons">
-                edit
-              </i>
-            </button> -->
-            <button class="btn task-btn" style="color:black;" @click="deleteInfoAboutTask(i)">
-              <i class="material-icons">
-                clear
-              </i>
-            </button>
-          </div>
-        </div>
-        <div class="editTask">
-          <!-- <input type="text"> -->Установить задачу до
-        <input type="text" name="" v-model='tasks[taskIndex].date' style='
-  padding: 4px 12px;
-  box-sizing: border-box;
-  border:none;'>
-        </div>
-        <div class="" style='display: flex;
-    justify-content: flex-end;padding: 5px;'
-    >     
-          <button class="btn" @click="showTaskInfo=!showTaskInfo,deleteEmptyTask()">Сохранить</button>
+    <div
+      class="zaglushka"
+      v-if="showTaskInfo"
+      @click="(showTaskInfo = !showTaskInfo), deleteLastTask()"
+    ></div>
+    <div class="task-info" v-if="showTaskInfo">
+      <div class="tasks-count">
+        <p v-if="taskIndex != null">
+          СОБЫТИЙ: {{ tasks[taskIndex].title.length }}
+        </p>
+        <p v-else>Добавьте события</p>
+        <div>
+          <button class="btn task-btn" @click="addNewTask()">
+            <i class="material-icons">
+              add
+            </i>
+          </button>
+          <button class="btn task-btn" @click="deleteAll(taskIndex)">
+            <i class="material-icons">
+              delete
+            </i>
+          </button>
         </div>
       </div>
+      <div
+        class="tasks"
+        v-for="i in tasks[taskIndex].title.length"
+        style="display: block;"
+        :key="i"
+      >
+        <input
+          type="text"
+          v-model="tasks[taskIndex].title[i - 1]"
+          class="border-bottom_display"
+          style=""
+        />
+        <div>
+          <textarea
+            v-model="tasks[taskIndex].about[i - 1]"
+            class="task-info_about border-bottom_display"
+            style=""
+          ></textarea>
+        </div>
+        <div class="task-group__btn">
+          <button
+            class="btn task-btn"
+            style="color:black;"
+            @click="deleteInfoAboutTask(i)"
+          >
+            <i class="material-icons">
+              clear
+            </i>
+          </button>
+        </div>
+      </div>
+      <div class="editTask">
+        <!-- Установить задачу до
+        <input
+          type="text"
+          name=""
+          v-model="tasks[taskIndex].date"
+          style="
+  padding: 4px 12px;
+  box-sizing: border-box;
+  border:none;"
+        /> -->
+      </div>
+      <div
+        class=""
+        style="display: flex;
+    justify-content: flex-end;padding: 5px;"
+      >
+        <button
+          class="btn"
+          @click="(showTaskInfo = !showTaskInfo), deleteEmptyTask()"
+        >
+          Сохранить
+        </button>
+      </div>
+    </div>
 
     <div class="content-table">
-      <!-- {{ initDate }}{{tasks[taskIndex]}}{{tasks}} -->
-      {{tasks}}
+      {{ tasks }}
       <div class="table__navigation">
         <span>{{ getTime() }}</span>
-        <!-- <div>{{ getTime() }}</div> -->
-        <!-- <div class="navigation-config"> -->
         <div class="navigation__config">
           <button class="btn" @click="minusDay()">
             <i class="material-icons">
@@ -89,7 +106,6 @@
               keyboard_arrow_left
             </i>
           </button>
-          <!-- new Date(y, m, 0).getDate() -->
           <span class="config_attribute">{{ configDate.month + 1 }}</span>
           <button class="btn" @click="plusMonth()">
             <i class="material-icons">
@@ -135,10 +151,10 @@
             @changeColor="changeColor"
             @openSucker="openSucker"
           />
-          <button @click="theme.editCustomColor=''" class="btn">
+          <button @click="theme.editCustomColor = ''" class="btn">
             Сбросить
           </button>
-          <button @click="theme.showColorPicker=false" class="btn">
+          <button @click="theme.showColorPicker = false" class="btn">
             Закрыть
           </button>
         </div>
@@ -149,29 +165,24 @@
           <div
             v-for="(days, i) in weekdays"
             :key="i"
-            @click="test(i)"
             class="days__headers"
-            
-            :style='theme.editCustomColor'
+            :style="theme.editCustomColor"
             :class="{ 'total-theme': theme.editTheme }"
           >
             {{ days }}
           </div>
         </div>
         <div class="days-container">
-          <!-- {{calendarDay}} -->
           <div
-            @click="testing(j)"
-            v-for="(j,k) in calendarDay"
+            @click="openCard(j)"
+            v-for="(j, k) in calendarDay"
             class="days__headers"
-            
-            :key='k'
-            :style='theme.editCustomColor'
-            :class="{ 'total-theme__td': theme.editTheme}"
+            :key="k"
+            :style="theme.editCustomColor"
+            :class="{ 'total-theme__td': theme.editTheme }"
           >
-          <!-- {{saveDay}}
-          {{getKey(6)}} -->
             <div :v-model="j">{{ j }}</div>
+            <!--showTaskCount-->
             <!-- <div  class="task-ball_position">
             <div  v-for="(l,key) in tasks" :key='key' :v-model='tasks'>
               <div   class='task-ball' v-if="getKey(j)">
@@ -181,11 +192,11 @@
               </div>
             </div>
             </div> -->
-              <!-- <div class="task-ball_item">
+            <!-- <div class="task-ball_item">
                   
               </div> -->
-              <!-- <p>{{key}}</p> -->
-              <!-- <div v-for="arrElem in l.title">
+            <!-- <p>{{key}}</p> -->
+            <!-- <div v-for="arrElem in l.title">
                 <p v-if=''>{{arrElem}}</p>
               </div> -->
 
@@ -209,16 +220,14 @@ export default {
   },
   created() {
     ///?
-    console.log(this.getKey('7.3.2020'),'return');
     // this.getKey('7.03.2020')
-    this.configDate.day=new Date().getDate()-1
+    this.configDate.day = new Date().getDate() - 1;
     this.initDayInTable();
     // this.fortd()
 
     this.intervalId = setInterval(() => (this.date = Date.now()), 10);
-    console.log("hi");
     //проще поставить Воскресенье первым столбцом
-    console.log(new Date(2020, 2, 1).getDay(), "hete");
+
     if (this.weekdays[new Date(2020, 2, 1).getDay() + 6] == "Вс")
       console.log(this.weekdays[6], "this.h");
     else
@@ -226,32 +235,32 @@ export default {
         this.weekdays[new Date().getDay() - 1],
         "Выводит текущий день недели"
       );
-
-    ///
-    // let days = new Date(
-    //   this.configDate.year,
-    //   this.configDate.month + 1,
-    //   0
-    // ).getDate(); //нашёл!
-    // console.log(days, "days"); //всего дней в месяце
-
-    // console.log(
-    //   new Date(
-    //     this.configDate.year,
-    //     this.configDate.month,
-    //     days - days
-    //   ).getDay(),
-    //   "день недели первый в этом месяце"
-    // );
     this.setLimit();
   },
   mounted() {
     this.fillCalendar();
     this.fillTable();
-    console.log(this.initDate.firstDayOfMonth);
+    //diapason
+
+    // for (const key in this.tasks) {
+    //   if(this.tasks[key].date!=key&this.tasks[key].date!=''){
+    //     for (let i = 0; i < key.split('.').length; i++) {
+    //       if(parseInt(key.split('.')[i],10)<parseInt(this.tasks[key].date.split('.')[i],10)){
+    //         for (let j=parseInt(key.split('.')[i],10)+1;j<=parseInt(this.tasks[key].date.split('.')[i],10); j++) {
+    //           console.log(j,'j');
+    //           if(i==0){
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   },
   beforeDestroy() {
     if (this.intervalId) clearInterval(this.intervalId);
+  },
+  updated(){
+
   },
   props: {
     msg: String
@@ -264,7 +273,6 @@ export default {
       month: new Date().getMonth(),
       year: new Date().getFullYear()
     },
-
     color: "#59c7f9",
     suckerCanvas: null,
     suckerArea: [],
@@ -273,9 +281,8 @@ export default {
       editTheme: false,
       editCustomColor: null,
       showColorPicker: false,
-      markDay:false,
+      markDay: false
     },
-    table: [6][7],
     taskColors: [
       "#232EFF",
       "#BA5AFF",
@@ -289,99 +296,106 @@ export default {
     ],
     // calendarDay: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42],
     calendarDay: [],
-    forHelp: "",
     initDate: {
       firstDayOfMonth: "",
-      daysOfMonth: ""
+      daysOfMonth: "",
     },
     dayLimit: "",
     tasks: {
-      '7.3.2020':{
-        title: ['Title1','Title2'],
-        about: ['Gigiena','Work'],
-        date: "10.03.2020",
+      "7.3.2020": {
+        title: ["Title1", "Title2"],
+        about: ["Gigiena", "Work"],
+        date: "10.3.2020"
       },
-      '14.3.2020':{
-        title: ['Title3','Title4'],
-        about: ['Gigiena1','Work2'],
-        date: "14.03.2020",
+      "14.3.2020": {
+        title: ["Title3", "Title4"],
+        about: ["Gigiena1", "Work2"],
+        date: "14.3.2020"
       }
     },
-    taskInfoEvent:{
-      deleteAll:false,
-      deleteOne:false,
-      addNew:false,
-      editTask:false,
-      toSave:false,
+    taskInfoEvent: {
+      deleteAll: false,
+      deleteOne: false,
+      addNew: false,
+      editTask: false,
+      toSave: false
     },
-    taskIndex:null,
-    getOneTask:{},
-    showTaskInfo:false,
-    saveDay:'',
+    taskIndex: null,
+    getOneTask: {},
+    showTaskInfo: false,
+    saveDay: ""
   }),
   methods: {
-    getKey(param){
-          if(this.tasks[`${param}.`+`${this.configDate.month+1}.`+`${this.configDate.year}`]){
-            return true
-          }
-          return false
-    },
-    addNewTask(){
-      this.tasks[this.taskIndex].title.push('')
-      this.tasks[this.taskIndex].about.push('')
-    },
-    deleteAll(param){
-     delete this.tasks[param]
-     this.showTaskInfo=false
-    },
-    deleteInfoAboutTask(param){
-      this.tasks[this.taskIndex].about.splice(param-1,1)
-      this.tasks[this.taskIndex].title.splice(param-1,1)
-    },
-    testing(j) {
-      if(j>0){
-        console.log();
-      this.showTaskInfo=!this.showTaskInfo
-      this.getTaskInfo(j+`.${this.configDate.month+1}`+`.${this.configDate.year}`)
+    getKey(param) {
+      if (
+        this.tasks[
+          `${param}.` +
+            `${this.configDate.month + 1}.` +
+            `${this.configDate.year}`
+        ]
+      ) {
+        return true;
       }
-      else 
-        alert('Ну не надо туда клацать))')
+      return false;
     },
-    getTaskInfo(param){
-      this.taskIndex=param
-      console.log(typeof this.tasks[param],'this.tasks[param]');
-      if(this.tasks[param]==undefined){
-        console.log('ZAS');
-      this.tasks[param]={title: [],
-        about: [],
-        date: "",}
-        this.taskInfoEvent.toSave=true
+    addNewTask() {
+      this.tasks[this.taskIndex].title.push("");
+      this.tasks[this.taskIndex].about.push("");
+    },
+    deleteAll(param) {
+      delete this.tasks[param];
+      this.showTaskInfo = false;
+    },
+    deleteInfoAboutTask(param) {
+      this.tasks[this.taskIndex].about.splice(param - 1, 1);
+      this.tasks[this.taskIndex].title.splice(param - 1, 1);
+    },
+    openCard(j) {
+      if (j > 0) {
+        this.showTaskInfo = !this.showTaskInfo;
+        this.getTaskInfo(
+          j + `.${this.configDate.month + 1}` + `.${this.configDate.year}`
+        );
+      } else alert("Ну не надо туда клацать))");
+    },
+    getTaskInfo(param) {
+      this.taskIndex = param;
+      // console.log(typeof this.tasks[param], "this.tasks[param]");
+      if (this.tasks[param] == undefined) {
+        console.log("ZAS");
+        this.tasks[param] = { title: [], about: [], date: "" };
+        this.taskInfoEvent.toSave = true;
+        return;
+      }
+      console.log("HERE");
+      this.taskInfoEvent.toSave = false;
+    },
+    deleteEmptyTask() {
+      for (let i = 0; i <= this.tasks[this.taskIndex].title.length; i++) {
+        if (
+          this.tasks[this.taskIndex].title[i] == "" ||
+          this.tasks[this.taskIndex].about[i] == ""
+        ) {
+          this.deleteInfoAboutTask(i + 1);
+          i--;
+          continue;
+        }
+      }
+      if (
+        this.tasks[this.taskIndex].title.length == 0 ||
+        this.tasks[this.taskIndex].about.length == 0
+      ) {
+        delete this.tasks[this.taskIndex];
+      }
+    },
+    deleteLastTask() {
+      if (this.taskInfoEvent.toSave == true) {
+        delete this.tasks[this.taskIndex];
+        console.log(this.tasks,'deleteLastTask');
+        this.taskInfoEvent.toSave = false;
         return
       }
-      console.log('HEREHERE');
-      this.taskInfoEvent.toSave=false
-    },
-    deleteEmptyTask(){
-      for (let i = 0; i <= this.tasks[this.taskIndex].title.length; i++) {
-        if(this.tasks[this.taskIndex].title[i]==""||this.tasks[this.taskIndex].about[i]==""){
-          this.deleteInfoAboutTask(i+1)
-          i--
-          continue
-        }
-        
-      }
-      if(this.tasks[this.taskIndex].title.length==0 || this.tasks[this.taskIndex].about.length==0){
-        delete this.tasks[this.taskIndex]
-      }
-    },
-    deleteLastTask(){
-      if(this.taskInfoEvent.toSave==true){
-        delete this.tasks[this.taskIndex]
-        console.log(this.tasks);
-        this.taskInfoEvent.toSave=false
-      }
-    },
-    saveTask(){
+      this.deleteEmptyTask()
     },
     setLimit() {
       this.dayLimit = this.initDate.daysOfMonth;
@@ -394,10 +408,8 @@ export default {
       }
     },
     fillTable() {
-      console.log("HELLO");
-      this.calendarDay = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,
-      22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42];
-      console.log(this.initDate.firstDayOfMonth, 'v-model="calendarDay"');
+      this.calendarDay = [
+        1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42];
       for (let i = 0; i < this.calendarDay.length; i++) {
         if (i <= this.initDate.firstDayOfMonth - 1) {
           this.calendarDay[i] = 0;
@@ -419,7 +431,6 @@ export default {
         this.configDate.month + 1,
         0
       ).getDate();
-      console.log(this.initDate.daysOfMonth, "this.initDate.daysOfMonth");
 
       this.initDate.firstDayOfMonth = new Date(
         this.configDate.year,
@@ -427,20 +438,14 @@ export default {
         this.initDate.daysOfMonth - this.initDate.daysOfMonth
       ).getDay();
       console.log(this.initDate.firstDayOfMonth, "this.firstDayOfMonth"); //день недели первого дня месяца
-      console.log(new Date().getDate(),'PLSSS');
-    },
-    test(e) {
-      console.log(e);
     },
     getTime() {
       return new Date(this.date).toLocaleTimeString();
     },
     setTheme() {
-      console.log("Test");
       this.theme.editTheme = !this.theme.editTheme;
     },
     changeColor(color) {
-      console.log(color.hex,'hexcolor');
       this.color = `${color}`;
       this.theme.editCustomColor = `background-color:${color.hex}`;
     },
@@ -451,7 +456,6 @@ export default {
     },
     setCustomTheme() {
       this.theme.showColorPicker = !this.theme.showColorPicker;
-      console.log(this.theme.showColorPicker);
     },
     ////////Здесь начинается улыбка
     plusDay() {
@@ -500,16 +504,7 @@ export default {
       this.fillTable();
     }
   },
-  computed: {
-    getDayOfWeek() {
-      this.firstDayOfMonth = new Date(
-        this.configDate.year,
-        this.configDate.month,
-        this.initDate.daysOfMonth - this.initDate.daysOfMonth
-      ).getDay();
-      return this.firstDayOfMonth;
-    },
-  }
+  computed: {}
 };
 </script>
 <style lang="scss" scoped>
@@ -554,7 +549,7 @@ export default {
   display: flex;
   border: 1px solid azure;
   display: flex;
-    flex-direction: column;
+  flex-direction: column;
 }
 .navigation__config {
   padding: 12px 12px 6px 12px;
@@ -598,25 +593,32 @@ export default {
 .zaglushka {
   width: 100%;
   position: absolute;
-  height: -webkit-fill-available;
+  // height: -webkit-fill-available;
   background-color: gray;
   display: flex;
-  opacity:0.6;
+  opacity: 0.6;
   justify-content: center;
   align-items: center;
+  min-height:100%;
 }
 .task-info {
+  // height: 550px;
+  min-height:100px;
+  max-height:902px;
+    overflow-y: scroll;
   width: 400px;
   background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
-      position: absolute;
-      &_about{
-  padding: 4px 12px;
-  margin: 8px 0;
-  box-sizing: border-box;resize:none;width: 100%;
+  position: absolute;
+  &_about {
+    padding: 4px 12px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    resize: none;
+    width: 100%;
     height: 50px;
-      }
+  }
 }
 .tasks-count {
   height: 50px;
@@ -630,18 +632,17 @@ export default {
 .task-btn {
   background-color: transparent;
 }
-.task-ball{
-  width:5px;
-  min-height:5px;
-  background-color:black;
-  border-radius:5000px;
-      margin:5px;
-  &_item{
-    border-radius:5px;
-
+.task-ball {
+  width: 5px;
+  min-height: 5px;
+  background-color: black;
+  border-radius: 5000px;
+  margin: 5px;
+  &_item {
+    border-radius: 5px;
   }
-  &_position{
-    display:flex;
+  &_position {
+    display: flex;
   }
 }
 .tasks {
@@ -651,16 +652,18 @@ export default {
   border: 1px solid #438cf5;
   padding: 10px;
 }
-.mark-day{
-  background-color:rgb(61, 0, 117);
+.mark-day {
+  background-color: rgb(61, 0, 117);
 }
-.task-group__btn{
-      display: flex;
-    justify-content: flex-end;
+.task-group__btn {
+  display: flex;
+  justify-content: flex-end;
 }
-.border-bottom_display{
+.border-bottom_display {
   padding: 4px 12px;
   box-sizing: border-box;
-  border-top:none;border-right:none;border-left:none;
+  border-top: none;
+  border-right: none;
+  border-left: none;
 }
 </style>
