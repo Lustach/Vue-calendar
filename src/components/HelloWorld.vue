@@ -82,7 +82,7 @@
     </div>
 
     <div class="content-table">
-      {{ tasks }}
+      <!-- {{ tasks }} -->
       <div class="table__navigation">
         <span>{{ getTime() }}</span>
         <div class="navigation__config">
