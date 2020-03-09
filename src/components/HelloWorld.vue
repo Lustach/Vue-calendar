@@ -211,7 +211,7 @@
 <script>
 import colorPicker from "@caohenghu/vue-colorpicker";
 export default {
-  name: "HelloWorld",
+  // name: "HelloWorld",
   components: {
     colorPicker
   },
