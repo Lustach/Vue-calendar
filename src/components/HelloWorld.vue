@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+<Card :message="color" @MessChange="color=$event"></Card>
     <div
       class="zaglushka"
       v-if="showTaskInfo"
@@ -158,7 +159,7 @@
             Закрыть
           </button>
         </div>
-        {{ color }}
+        <!-- {{ color }} -->
       </div>
       <div class="table" style="">
         <div class="th-weekdays" style="    display: flex;">
@@ -209,11 +210,13 @@
 </template>
 
 <script>
+import Card from './Card.vue'
 import colorPicker from "@caohenghu/vue-colorpicker";
 export default {
   // name: "HelloWorld",
   components: {
-    colorPicker
+    colorPicker,
+    Card
   },
   beforeCreate() {
     this.date = new Date().getTime();
@@ -266,6 +269,9 @@ export default {
     msg: String
   },
   data: () => ({
+    test:{
+      value:'HOPA',
+    },
     weekdays: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
     date: new Date().getTime(),
     configDate: {

@@ -1,0 +1,55 @@
+.task {
+  &-info {
+    // height: 550px;
+    min-height: 100px;
+    max-height: 902px;
+    overflow-y: scroll;
+    width: 400px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    position: absolute;
+    &_about {
+      padding: 4px 12px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      resize: none;
+      width: 100%;
+      height: 50px;
+    }
+  }
+  &-count{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    border: 1px solid white;
+    background-color: #438cf5;
+    border-radius: 5px;
+    justify-content: space-between;
+  }
+  &-btn {
+    background-color: transparent;
+  }
+  &-group__btn {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+.btn {
+    background-color: DodgerBlue;
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    &:hover{
+        background-color: RoyalBlue;
+    }
+  }
+.tasks {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #438cf5;
+    padding: 10px;
+  }
